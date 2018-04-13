@@ -1,4 +1,4 @@
-concat('powershell Set-ExecutionPolicy Bypass -Force ; powershell -Command \"Invoke-WebRequest \"\"https://github.com/docker/compose/releases/download/1.20.1/docker-compose-Windows-x86_64.exe\"\" -UseBasicParsing -OutFile C:\ARMProvisioningSkript.ps1; & C:\ARMProvisioningSkript.ps1 \"\"',parameters('dns'),'.westeurope.cloudapp.azure.com\"\"')]"
+concat('powershell Set-ExecutionPolicy Bypass -Force ; powershell -Command \"Invoke-WebRequest \"\"https://github.com/fbrass/ARM-Provisioning-Skript/blob/master/ARMProvisiongSkript.ps1\"\" -UseBasicParsing -OutFile C:\ARMProvisioningSkript.ps1; & C:\ARMProvisioningSkript.ps1 \"\"',parameters('dns'),'.westeurope.cloudapp.azure.com\"\"')]"
 
 
 
