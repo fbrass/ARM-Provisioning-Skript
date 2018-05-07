@@ -17,7 +17,7 @@ Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.20.1/do
 Write-Output "Docker compose installation finished";
 
 
-New-NetFirewallRule -LocalPort 8080 -Name WinRM-Https-In-Internet -DisplayName WinRM-Https-In-Internet -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
+New-NetFirewallRule -LocalPort 5986 -Name WinRM-Https-In-Internet -DisplayName WinRM-Https-In-Internet -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-TCP -DisplayName SMB-For-TFS-TCP -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-UDP -DisplayName SMB-For-TFS-UDP -Protocol UDP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 write-Output "Firewall configured"
@@ -31,7 +31,7 @@ Write-Output "New-SelfSignedCertificate done";
 $cert = (Get-ChildItem -path cert:\\LocalMachine\\My | where { $_.Subject -eq "CN=$publicHostName" })[0]; 
 Write-Output "cert: $cert";
 
-$winRmCommand = 'winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname="' + $publicHostName + '";CertificateThumbprint="' + $cert.Thumbprint + '";Port="8080"}';
+$winRmCommand = 'winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname="' + $publicHostName + '";CertificateThumbprint="' + $cert.Thumbprint + '";Port="5986"}';
 Write-Output "winRmCommand $winRmCommand";
 
 
