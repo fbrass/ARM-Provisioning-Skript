@@ -17,6 +17,14 @@ Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.20.1/do
 Write-Output "Docker compose installation finished";
 
 
+iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
+choco install 7zip;
+Write-Output "Chocolatey and 7-Zip installation finished"
+
+Install-Module AzureRM
+Import-Module AzureRM
+Write-Output "Installation of AzureRM finished"
+
 New-NetFirewallRule -LocalPort 5986 -Name WinRM-Https-In-Internet -DisplayName WinRM-Https-In-Internet -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-TCP -DisplayName SMB-For-TFS-TCP -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-UDP -DisplayName SMB-For-TFS-UDP -Protocol UDP -Direction Inbound -Action Allow -RemoteAddress Internet; 
@@ -37,6 +45,8 @@ Write-Output "winRmCommand $winRmCommand";
 
 cmd.exe /c $winRmCommand; 
 Write-Output "winrmcommand ausgeführt"
+
+
 
 
 
