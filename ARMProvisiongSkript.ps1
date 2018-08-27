@@ -16,16 +16,17 @@ Write-Output "Docker Installation finished";
 Invoke-WebRequest "https://github.com/docker/compose/releases/download/1.20.1/docker-compose-Windows-x86_64.exe" -UseBasicParsing -OutFile ${Env:ProgramFiles}\\docker\\docker-compose.exe; 
 Write-Output "Docker compose installation finished";
 
-Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; 
+
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
 choco install 7zip.portable -y;
 Write-Output "Chocolatey and 7-Zip installation finished";
 
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; 
 Install-Module AzureRM;
 Import-Module AzureRM;
 Write-Output "Installation of AzureRM finished";
 
-New-NetFirewallRule -LocalPort 5986 -Name WinRM-Https-In-Internet -DisplayName WinRM-Https-In-Internet -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
+#New-NetFirewallRule -LocalPort 5986 -Name WinRM-Https-In-Internet -DisplayName WinRM-Https-In-Internet -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-TCP -DisplayName SMB-For-TFS-TCP -Protocol TCP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 New-NetFirewallRule -LocalPort 445 -Name SMB-For-TFS-UDP -DisplayName SMB-For-TFS-UDP -Protocol UDP -Direction Inbound -Action Allow -RemoteAddress Internet; 
 write-Output "Firewall configured"
@@ -33,18 +34,18 @@ write-Output "Firewall configured"
 $publicHostName = "$dns.westeurope.cloudapp.azure.com"; 
 Write-Output "publicHostName: $publicHostName";
 
-New-SelfSignedCertificate -DnsName $publicHostName -CertStoreLocation "cert:\\LocalMachine\\My"; 
-Write-Output "New-SelfSignedCertificate done";
+#New-SelfSignedCertificate -DnsName $publicHostName -CertStoreLocation "cert:\\LocalMachine\\My"; 
+#Write-Output "New-SelfSignedCertificate done";
 
-$cert = (Get-ChildItem -path cert:\\LocalMachine\\My | where { $_.Subject -eq "CN=$publicHostName" })[0]; 
-Write-Output "cert: $cert";
+#$cert = (Get-ChildItem -path cert:\\LocalMachine\\My | where { $_.Subject -eq "CN=$publicHostName" })[0]; 
+#Write-Output "cert: $cert";
 
-$winRmCommand = 'winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname="' + $publicHostName + '";CertificateThumbprint="' + $cert.Thumbprint + '";Port="5986"}';
-Write-Output "winRmCommand $winRmCommand";
+#$winRmCommand = 'winrm create winrm/config/Listener?Address=*+Transport=HTTPS @{Hostname="' + $publicHostName + '";CertificateThumbprint="' + $cert.Thumbprint + '";Port="5986"}';
+#Write-Output "winRmCommand $winRmCommand";
 
 
-cmd.exe /c $winRmCommand; 
-Write-Output "winrmcommand ausgeführt"
+#cmd.exe /c $winRmCommand; 
+#rite-Output "winrmcommand ausgeführt"
 
 
 
